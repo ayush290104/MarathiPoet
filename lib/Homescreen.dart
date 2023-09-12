@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medhanuj/Fourthpage.dart';
 import 'package:medhanuj/firstpage.dart';
 import 'controllerapi.dart';
 
@@ -12,28 +13,74 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   final MyController myController = Get.put(MyController());
+
  @override
   void initState() {
     super.initState();
     myController.data.clear();
+    myController.fetchauthor();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+   appBar: AppBar(
+     centerTitle: true,
+     title: Text("Marathi Poet"),
+
+   ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
+
               SizedBox(
-                height: MediaQuery.of(context).size.height*0.1,
+                height: MediaQuery.of(context).size.height*0.03,
               ),
-              const Center(child: Text("कवींची मांदियाळी",style: TextStyle(
+
+                   Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Container(
+                       decoration: BoxDecoration(
+
+                         borderRadius: BorderRadius.circular(20),
+                         border: Border.all(
+                           color: Colors.blue, // Set the border color to blue
+                           width: 2.0, // Set the border width as desired
+                         ),
+                       ),
+                       child: Padding(
+                         padding: const EdgeInsets.only(right: 8,left: 8),
+                         child: TextField(
+                           onChanged: (String s){
+                                myController.searched.value = s;
+                           },
+                           decoration: InputDecoration(
+                              hintText: 'शब्द शोधा',
+                              border: InputBorder.none,
+
+                              suffixIcon: IconButton(onPressed: () {
+                                myController.fetchsearchData(myController.searched.value);
+                                Get.to(Fourthpage());
+                              }, icon:  Icon(Icons.search)),),
+
+                            ),
+                       ),
+                     ),
+                   ),
+
+
+
+
+              SizedBox(
+                height: MediaQuery.of(context).size.height*0.03,
+              ),
+               Center(child: Text("कवींची मांदियाळी",style: TextStyle(
                   fontFamily: 'Shobhika',
-                  fontSize: 30,
+                  fontSize: Get.width*0.08,
                   fontWeight: FontWeight.w400
               ),)),
               SizedBox(
-                height: MediaQuery.of(context).size.height*0.1,
+                height: MediaQuery.of(context).size.height*0.03,
               ),
               Obx(() {
                 if (myController.author.isEmpty) {

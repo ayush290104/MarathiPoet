@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'Fourthpage.dart';
 import 'Thirdpage.dart';
 import 'controllerapi.dart';
 
@@ -27,18 +28,58 @@ class _SecondpageState extends State<Secondpage> {
 
   Widget build(BuildContext context) {
     return  Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Marathi Poet"),
+
+        ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
-                height: 30,
+                height: MediaQuery.of(context).size.height*0.03,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.blue, // Set the border color to blue
+                      width: 2.0, // Set the border width as desired
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8,left: 8),
+                    child: TextField(
+                      onChanged: (String s){
+                        myController.searched.value = s;
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'शब्द शोधा',
+                        border: InputBorder.none,
+
+                        suffixIcon: IconButton(onPressed: () {
+                          myController.fetchsearchData(myController.searched.value);
+                          Get.to(Fourthpage());
+                        }, icon:  Icon(Icons.search)),),
+
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height*0.03,
               ),
               Center(child: Text("${myController.poet.value} - ${myController.category.value}",style: TextStyle(
-                fontSize: Get.width*0.08,
+                  fontFamily: 'Shobhika',
+                  fontSize: Get.width*0.08,
+                  fontWeight: FontWeight.w400
               ),)),
               SizedBox(
-                height: 30,
+                height: MediaQuery.of(context).size.height*0.03,
               ),
              Obx(() =>ListView.builder(
                  // Add this line

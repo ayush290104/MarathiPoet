@@ -11,17 +11,20 @@ class MyController extends GetxController {
   final RxList<dynamic> author = <dynamic>[].obs;
   final RxString poet = "".obs;
   final RxString category = "".obs;
+  final RxList<dynamic> searchdata = <dynamic>[].obs;
   RxBool isload = false.obs;
   final RxString poemselected = "".obs;
   final RxList<String> poem = <String>[].obs;
   final RxList<String> poembyauthor = <String>[].obs;
   final RxInt index = (-1).obs;
   var responseData = RxMap<String, dynamic>({});
-  @override
-  void onInit() {
-    super.onInit();
-    fetchauthor();// Call the initialization function in onInit
-  }
+  final RxString searchpoet = "".obs;
+  final RxString searchcategory = "".obs;
+  final RxString searchpoem = "".obs;
+
+  var responsesearch = RxMap<String,dynamic>({});
+  final RxString searched = "".obs;
+
   Future<void> fetchauthor() async {
     debugPrint("came inside");
     final url = Uri.parse(
@@ -120,5 +123,67 @@ debugPrint("url is : ${url}");
       throw Exception('Failed to fetch data: $e');
     }
   }
+  Future<void> fetchsearchData(String string) async {
+    isload.value = true;
+    debugPrint("came inside");
+    final url = Uri.parse(
+        'https://6ll5hl5syati6eztratur4rdom0washf.lambda-url.us-east-1.on.aws/?$string');
+    searched.value = "";
+
+    try {
+      final response = await http.get(url);
+      isload.value = false;
+      if (response.statusCode == 200) {
+        isload.value = false;
+        final jsonData = json.decode(response.body) as List<dynamic>;
+
+        // Clear the existing data
+        searchdata.clear();
+
+        // Parse the JSON response into Poemcategory objects and add them to the data list
+        jsonData.forEach((item) {
+          searchdata.add(item);
+
+
+        });
+
+        // Update the data variable with the parsed JSON
+
+      } else {
+        isload.value = false;
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      isload.value = false;
+      throw Exception('Failed to fetch data: $e');
+    }
+  }
+  Future<void> fetchpoemsearch(String poets,String poems) async {
+    isload.value = true;
+    debugPrint("came inside");
+    final url = Uri.parse(
+        'https://tpz27nhe7t2l4nhbt3fzq5opaa0lavpg.lambda-url.us-east-1.on.aws/?${poets} ${poems}');
+    debugPrint("url is : ${url}");
+    try {
+
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        isload.value = false;
+
+        // Clear the existing data
+        responsesearch.clear();
+        responsesearch.value = json.decode(response.body) as Map<String,dynamic>;
+      } else {
+        isload.value = false;
+
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      isload.value = false;
+
+      throw Exception('Failed to fetch data: $e');
+    }
+  }
 
 }
+
