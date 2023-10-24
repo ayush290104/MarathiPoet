@@ -127,8 +127,9 @@ debugPrint("url is : ${url}");
     isload.value = true;
     debugPrint("came inside");
     final url = Uri.parse(
-        'https://6ll5hl5syati6eztratur4rdom0washf.lambda-url.us-east-1.on.aws/?$string');
+        'https://6ll5hl5syati6eztratur4rdom0washf.lambda-url.us-east-1.on.aws/?${searched.value}');
     searched.value = "";
+    debugPrint(url.toString());
 
     try {
       final response = await http.get(url);
